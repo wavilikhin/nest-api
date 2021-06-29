@@ -1,0 +1,23 @@
+version: '3.3'
+services:
+    nest_api:
+        image: api-project_nest_api
+        container_name: nest-js-api
+        restart: always
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./env:/opt/app/api/
+        command: /bin/sh -c "npm run start:prod"
+    mongo:
+        image: mongo:4.4.4
+        container_name: mongo
+        restart: always
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=admin
+            - MONGO_INITDB_ROOT_PASSWORD=admin
+        ports:
+            - '27017:27017'
+        volumes:
+            - ./mongo-data-4.4:/data/db
+        command: --wiredTigerCacheSizeGB 1.5

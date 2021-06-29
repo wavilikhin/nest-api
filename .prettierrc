@@ -1,0 +1,7 @@
+{
+    "singleQuote": true,
+    "trailingComma": "all",
+    "indent": ["spaces", "4"],
+    "useTabs": false,
+    "tabWidth": 4
+}
