@@ -3,8 +3,12 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { disconnect } from 'mongoose';
+import { AuthDto } from 'src/auth/dto/auth.dto';
 
-const user = { email: 'test@mail.ru', password: 'test' };
+const loginDto: AuthDto = {
+    email: 'test@mail.com',
+    password: 'test',
+};
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;
@@ -22,10 +26,7 @@ describe('AuthController (e2e)', () => {
     it('/auth/login (POST) - success', async (done) => {
         const { body } = await request(app.getHttpServer())
             .post('/auth/login')
-            .send({
-                email: user.email,
-                password: user.password,
-            });
+            .send(loginDto);
 
         expect(body.accessToken).toBeDefined();
         done();
@@ -35,7 +36,7 @@ describe('AuthController (e2e)', () => {
         await request(app.getHttpServer())
             .post('/auth/login')
             .send({
-                email: user.email,
+                email: loginDto.email,
                 password: 'wrongPass',
             })
             .expect({
@@ -51,7 +52,7 @@ describe('AuthController (e2e)', () => {
             .post('/auth/login')
             .send({
                 email: 'wrong',
-                password: user.password,
+                password: loginDto.password,
             })
             .expect({
                 statusCode: 401,

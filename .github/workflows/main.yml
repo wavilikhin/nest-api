@@ -1,10 +1,26 @@
-name: Publish Docker
+name: Lint, test and publish Docker image
 
 on:
     push:
         branches: [master]
 jobs:
-    default-version:
+    lint:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [macos-latest, windows-latest, ubuntu-latest]
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - uses: actions/setup-node@v2-beta
+              with:
+                  node-version: 16
+
+            - run: npm install
+            - run: npm run lint
+    test:
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
@@ -21,7 +37,6 @@ jobs:
             - run: npm install
             - run: npm run test
             - run: npm run test:e2e
-            - run: npm run lint
     build:
         runs-on: ubuntu-latest
         steps:

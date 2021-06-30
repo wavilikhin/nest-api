@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { CreateReviewDto } from '../src/review/dto/create-review.dto';
 import { Types, disconnect } from 'mongoose';
-import { AuthDto } from 'src/auth/dto/auth.dto';
+import { AuthDto } from '../src/auth/dto/auth.dto';
 
 const productId = new Types.ObjectId().toHexString();
 
@@ -18,7 +18,7 @@ const testDto: CreateReviewDto = {
 
 const loginDto: AuthDto = {
     email: 'test@mail.com',
-    password: 'admin',
+    password: 'test',
 };
 
 describe('ReviewController (e2e)', () => {

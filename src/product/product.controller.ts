@@ -12,12 +12,11 @@ import {
     ValidationPipe,
     UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
+import { JwtAuthGuard } from '../../src/auth/guards/jwt.guard';
+import { IdValidationPipe } from '../../src/pipes/id-validation.pipe';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
 import { PRODUCT_NOT_FOUND_ERROR } from './product.constants';
-import { ProductModule } from './product.module';
 import { ProductService } from './product.service';
 
 @Controller('product')
