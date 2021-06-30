@@ -26,7 +26,7 @@ describe('ReviewController (e2e)', () => {
     let createdId: string;
     let token: string;
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [AppModule],
         }).compile();
