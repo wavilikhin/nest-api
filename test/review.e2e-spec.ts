@@ -85,7 +85,7 @@ describe('ReviewController (e2e)', () => {
             });
     });
 
-    it('/review/:id (DELETE) - success', (done) => {
+    it('/review/:id (DELETE) - success', async (done) => {
         return request(app.getHttpServer())
             .delete('/review/' + createdId)
             .set('Authorization', 'Bearer ' + token)
