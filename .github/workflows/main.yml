@@ -2,7 +2,7 @@ name: Lint, test and publish Docker image
 
 on:
     push:
-        branches: [master]
+        branches: ['master', 'development']
 jobs:
     lint:
         runs-on: ${{ matrix.os }}
