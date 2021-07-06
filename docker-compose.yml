@@ -9,7 +9,7 @@ services:
             - '3000:3000'
         volumes:
             - ./env:/opt/app/api/
-        command: /bin/sh -c "npm run start:prod"
+        # command: /bin/sh -c "npm run start:prod"
     mongo:
         image: mongo:4.4.4
         container_name: mongo
