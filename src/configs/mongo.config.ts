@@ -10,13 +10,21 @@ export const getMongoConfig = async (
     };
 };
 
-const getMongoString = (configService: ConfigService) =>
-    'mongodb://' +
-    configService.get('MONGO_HOST') +
-    ':' +
-    configService.get('MONGO_PORT') +
-    '/' +
-    configService.get('MONGO_AUTHDATABASE');
+const getMongoString = (configService: ConfigService) => {
+    console.log(
+        `========\n\n\nTesting env ${configService.get('CI')}========\n\n\n`,
+    );
+    return (
+        'mongodb://' +
+        configService.get('MONGO_HOST') +
+        ':' +
+        configService.get('MONGO_PORT') +
+        '/' +
+        configService.get('MONGO_AUTHDATABASE')
+    );
+};
+
+// const getMongoString = (configService: ConfigService) =>
 // 'mongodb://' +
 // configService.get('MONGO_LOGIN') +
 // ':' +
