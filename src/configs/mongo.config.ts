@@ -13,6 +13,11 @@ export const getMongoConfig = async (
 const getMongoString = (configService: ConfigService) => {
     switch (configService.get('CI')) {
         case true:
+            console.log(
+                `\n\n######################\nUSING MONGO FOR CI, CI=${configService.get(
+                    'CI',
+                )}`,
+            );
             return (
                 'mongodb://' +
                 configService.get('MONGO_HOST') +
@@ -22,6 +27,11 @@ const getMongoString = (configService: ConfigService) => {
                 configService.get('MONGO_AUTHDATABASE')
             );
         default:
+            console.log(
+                `\n\n######################\nUSING MONGO FOR PROD, CI=${configService.get(
+                    'CI',
+                )}`,
+            );
             return (
                 'mongodb://' +
                 configService.get('MONGO_LOGIN') +
