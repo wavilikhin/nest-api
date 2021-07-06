@@ -9,5 +9,5 @@ RUN npm run build
 
 COPY . .
 
-RUN npm prune --production
-RUN npm run clear:dev
+# RUN npm prune --production
+# RUN npm run clear:dev
