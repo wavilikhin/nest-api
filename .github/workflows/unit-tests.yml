@@ -28,7 +28,7 @@ jobs:
             - name: Run unit tests
               run: npm run test
 
-            - name: Trigger next workflow
+            - name: Run e2e tests
               if: success()
               uses: peter-evans/repository-dispatch@v1
               with:
