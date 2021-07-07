@@ -1,8 +1,6 @@
-# Project Title
+# NestJs boilerplate API
 
-A brief description of what this project does and who it's for
-
-## Badges
+Simple NestJs API with CRUD operations and users auth
 
 [![linter](https://github.com/wavilikhin/nest-api/actions/workflows/main-01-lint.yml/badge.svg)](https://github.com/wavilikhin/nest-api/actions/workflows/main-01-lint.yml)
 [![unit tests](https://github.com/wavilikhin/nest-api/actions/workflows/main-02-unit-tests.yml/badge.svg)](https://github.com/wavilikhin/nest-api/actions/workflows/main-02-unit-tests.yml)
