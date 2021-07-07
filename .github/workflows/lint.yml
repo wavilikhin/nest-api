@@ -8,7 +8,7 @@ on:
                 default: false
 
     push:
-        branches: ['master', 'development']
+        branches: main
 jobs:
     lint:
         runs-on: ubuntu-latest
@@ -29,10 +29,10 @@ jobs:
               run: npm run lint
 
             - name: Trigger next workflow
-              if: success()
+              # if: success()
               uses: peter-evans/repository-dispatch@v1
               with:
                   token: ${{ secrets.REPO_GHA_PAT }}
-                  repository: ${{ github.repository }}
+                  repository: wavilikhin/nest-api
                   event-type: trigger-workflow-2
                   client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
