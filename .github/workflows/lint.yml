@@ -8,7 +8,7 @@ on:
                 default: false
 
     push:
-        branches: ['master']
+        branches: ['master', 'development']
 jobs:
     lint:
         runs-on: ubuntu-latest
