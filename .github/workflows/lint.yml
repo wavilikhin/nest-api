@@ -6,9 +6,8 @@ on:
                 description: 'Whether to run the subsequent workflows after triggering this one manully.'
                 required: false
                 default: false
-
     push:
-        branches: main
+        branches: [main]
 jobs:
     lint:
         runs-on: ubuntu-latest
