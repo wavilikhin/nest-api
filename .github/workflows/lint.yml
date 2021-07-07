@@ -31,5 +31,5 @@ jobs:
               with:
                   token: ${{ secrets.REPO_GHA_PAT }}
                   repository: wavilikhin/nest-api
-                  event-type: trigger-workflow-2
+                  event-type: run-unit-tests
                   client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

@@ -7,7 +7,7 @@ on:
                 required: false
                 default: false
     repository_dispatch:
-        types: [run-unit-tests]
+        types: [run-e2e-tests]
 
 jobs:
     unit-tests:
@@ -22,17 +22,13 @@ jobs:
               with:
                   node-version: 16.x
 
+            - name: Start MongoDB
+              uses: supercharge/mongodb-github-action@1.6.0
+              with:
+                  mongodb-version: ${{ matrix.mongodb-version }}
             - name: npm install
               run: npm ci
-
-            - name: Run unit tests
-              run: npm run test
-
-            - name: Trigger next workflow
-              if: success()
-              uses: peter-evans/repository-dispatch@v1
-              with:
-                  token: ${{ secrets.REPO_GHA_PAT }}
-                  repository: wavilikhin/nest-api
-                  event-type: run-e2e-tests
-                  client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+            - name: Run run e2e tests
+              run: npm run test:e2e
+              env:
+                  USE_LOCAL_MONGO_HOST: true
