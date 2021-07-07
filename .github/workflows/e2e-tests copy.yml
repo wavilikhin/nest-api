@@ -1,4 +1,4 @@
-name: unit tests
+name: Run e2e tests
 on:
     workflow_dispatch:
         inputs:
@@ -10,7 +10,7 @@ on:
         types: [run-e2e-tests]
 
 jobs:
-    unit-tests:
+    e2e-tests:
         runs-on: ubuntu-latest
 
         steps:
@@ -32,3 +32,12 @@ jobs:
               run: npm run test:e2e
               env:
                   USE_LOCAL_MONGO_HOST: true
+
+            - name: Trigger next workflow
+              if: success()
+              uses: peter-evans/repository-dispatch@v1
+              with:
+                  token: ${{ secrets.REPO_GHA_PAT }}
+                  repository: wavilikhin/nest-api
+                  event-type: publish-docker-image
+                  client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

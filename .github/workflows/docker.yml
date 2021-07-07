@@ -1,0 +1,29 @@
+name: Publish docker image
+on:
+    workflow_dispatch:
+        inputs:
+            trigger_next:
+                description: 'Whether to run the subsequent workflows after triggering this one manully.'
+                required: false
+                default: false
+    repository_dispatch:
+        types: [publish-docker-image]
+
+jobs:
+    unit-tests:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.event.client_payload.sha }}
+
+            - uses: actions/checkout@master
+            - name: Publish to registry
+              uses: elgohr/Publish-Docker-Github-Action@master
+              with:
+                  registry: docker.pkg.github.com
+                  name: docker.pkg.github.com/wavilikhin/nest-api/nest-api
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_PASSWORD }}
+                  tags: development
