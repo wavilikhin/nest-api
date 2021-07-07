@@ -5,6 +5,7 @@ import { AppModule } from './../src/app.module';
 import { CreateReviewDto } from '../src/review/dto/create-review.dto';
 import { Types, disconnect } from 'mongoose';
 import { AuthDto } from '../src/auth/dto/auth.dto';
+import { UserModel } from 'src/auth/user.model';
 
 const productId = new Types.ObjectId().toHexString();
 
@@ -17,7 +18,7 @@ const testDto: CreateReviewDto = {
 };
 
 const loginDto: AuthDto = {
-    email: 'test@mail.com',
+    email: 'review-test@mail.com',
     password: 'test',
 };
 
@@ -25,6 +26,7 @@ describe('ReviewController (e2e)', () => {
     let app: INestApplication;
     let createdId: string;
     let token: string;
+    let user: UserModel;
 
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -33,6 +35,12 @@ describe('ReviewController (e2e)', () => {
 
         app = moduleFixture.createNestApplication();
         await app.init();
+
+        const registerRequest = await request(app.getHttpServer())
+            .post('/auth/register')
+            .send(loginDto);
+
+        user = registerRequest.body;
 
         const { body } = await request(app.getHttpServer())
             .post('/auth/login')
@@ -101,7 +109,11 @@ describe('ReviewController (e2e)', () => {
             .then(() => done());
     });
 
-    afterAll(() => {
+    afterAll(async (done) => {
+        await request(app.getHttpServer()).delete(`/auth/delete/${user._id}`);
+
         disconnect();
+
+        done();
     });
 });

@@ -2,11 +2,14 @@ import {
     BadRequestException,
     Body,
     Controller,
+    Delete,
     HttpCode,
+    Param,
     Post,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
+import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { ALREADY_REGISTERED_ERROR } from './auth.constants';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
@@ -35,5 +38,11 @@ export class AuthController {
         );
 
         return this.authService.login(user.email);
+    }
+
+    @HttpCode(200)
+    @Delete('delete/:id')
+    async delete(@Param('id', IdValidationPipe) id: string) {
+        return this.authService.deleteUser(id);
     }
 }

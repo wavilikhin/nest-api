@@ -4,14 +4,16 @@ import { AppModule } from '../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { disconnect } from 'mongoose';
 import { AuthDto } from 'src/auth/dto/auth.dto';
+import { UserModel } from 'src/auth/user.model';
 
 const loginDto: AuthDto = {
-    email: 'test@mail.com',
+    email: 'auth-test@mail.com',
     password: 'test',
 };
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;
+    let user: UserModel;
 
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -21,6 +23,12 @@ describe('AuthController (e2e)', () => {
         app = moduleFixture.createNestApplication();
 
         await app.init();
+
+        const { body } = await request(app.getHttpServer())
+            .post('/auth/register')
+            .send(loginDto);
+
+        user = body;
     });
 
     it('/auth/login (POST) - success', async (done) => {
@@ -62,7 +70,11 @@ describe('AuthController (e2e)', () => {
             .then(() => done());
     });
 
-    afterAll(() => {
+    afterAll(async (done) => {
+        await request(app.getHttpServer()).delete(`/auth/delete/${user._id}`);
+
         disconnect();
+
+        done();
     });
 });

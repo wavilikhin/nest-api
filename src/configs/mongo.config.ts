@@ -11,9 +11,9 @@ export const getMongoConfig = async (
 };
 
 const getMongoString = (configService: ConfigService) =>
-    configService.get('CI')
+    configService.get('USE_LOCAL_MONGO_HOST')
         ? 'mongodb://' +
-          configService.get('MONGO_HOST') +
+          configService.get('MONGO_LOCAL_HOST') +
           ':' +
           configService.get('MONGO_PORT') +
           '/' +
@@ -23,7 +23,7 @@ const getMongoString = (configService: ConfigService) =>
           ':' +
           configService.get('MONGO_PASSWORD') +
           '@' +
-          configService.get('MONGO_HOST') +
+          configService.get('MONGO_DOCKER_HOST') +
           ':' +
           configService.get('MONGO_PORT') +
           '/' +
