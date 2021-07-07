@@ -1,5 +1,12 @@
 name: lint
 on:
+    workflow_dispatch:
+        inputs:
+            trigger_next:
+                description: 'Whether to run the subsequent workflows after triggering this one manully.'
+                required: false
+                default: false
+
     push:
         branches: ['master', 'development']
 jobs:
@@ -21,11 +28,11 @@ jobs:
             - name: Run linter
               run: npm run lint
 
-            - name: Trigger unit tests
+            - name: Trigger next workflow
               if: success()
               uses: peter-evans/repository-dispatch@v1
               with:
-                  token: ${{ secrets.DOCKER_PASSWORD }}
+                  token: ${{ secrets.REPO_GHA_PAT }}
                   repository: ${{ github.repository }}
-                  event-type: trigger-unit-tests
+                  event-type: trigger-workflow-2
                   client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
