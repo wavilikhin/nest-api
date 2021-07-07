@@ -1,4 +1,4 @@
-name: Run e2e tests
+name: Run linter
 on:
     workflow_dispatch:
         inputs:
@@ -6,38 +6,39 @@ on:
                 description: 'Whether to run the subsequent workflows after triggering this one manully.'
                 required: false
                 default: false
-    repository_dispatch:
-        types: [run-e2e-tests]
 
+    push:
+        branches: ['master', 'development']
 jobs:
-    e2e-tests:
+    lint:
         runs-on: ubuntu-latest
-
         steps:
             - uses: actions/checkout@v2
-              with:
-                  ref: ${{ github.event.client_payload.sha }}
 
             - uses: actions/setup-node@v2-beta
               with:
                   node-version: 16.x
 
-            - name: Start MongoDB
-              uses: supercharge/mongodb-github-action@1.6.0
-              with:
-                  mongodb-version: 4.4.4
             - name: npm install
               run: npm ci
-            - name: Run run e2e tests
-              run: npm run test:e2e
-              env:
-                  USE_LOCAL_MONGO_HOST: true
 
-            - name: Publish docker image
+            - name: Run linter
+              run: npm run lint
+
+            - name: Run unit tests
               if: success()
               uses: peter-evans/repository-dispatch@v1
               with:
                   token: ${{ secrets.REPO_GHA_PAT }}
                   repository: wavilikhin/nest-api
-                  event-type: publish-docker-image
+                  event-type: main-02-run-unit-tests
                   client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
+            - name: Set final check status
+              if: ${{ (github.event_name != 'workflow_dispatch' && failure()) }}
+              uses: peter-evans/repository-dispatch@v1
+              with:
+                  token: ${{ secrets.REPO_GHA_PAT }}
+                  repository: wavilikhin/nest-api
+                  event-type: main-05-final-check
+                  client-payload: '{"success": false}'
