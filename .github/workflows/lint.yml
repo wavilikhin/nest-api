@@ -6,8 +6,9 @@ on:
                 description: 'Whether to run the subsequent workflows after triggering this one manully.'
                 required: false
                 default: false
+
     push:
-        branches: ['main']
+        branches: ['master']
 jobs:
     lint:
         runs-on: ubuntu-latest
@@ -28,7 +29,7 @@ jobs:
               run: npm run lint
 
             - name: Trigger next workflow
-              # if: success()
+              if: success()
               uses: peter-evans/repository-dispatch@v1
               with:
                   token: ${{ secrets.REPO_GHA_PAT }}
