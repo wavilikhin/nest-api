@@ -5,5 +5,5 @@ RUN npm ci
 COPY . .
 RUN npm run build
 RUN npm prune --production
-# RUN npm run clear:dev
+RUN npm run clear:dev
 CMD ["node", "./dist/main.js"]
