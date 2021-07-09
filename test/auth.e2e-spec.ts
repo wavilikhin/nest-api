@@ -3,13 +3,15 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { disconnect } from 'mongoose';
-import { AuthDto } from 'src/auth/dto/auth.dto';
-import { UserModel } from 'src/auth/user.model';
+// import { AuthDto } from 'src/auth/dto/auth.dto';
+import { UserModel } from 'src/user/user.model';
 
 const loginDto: AuthDto = {
     email: 'auth-test@mail.com',
     password: 'test',
 };
+
+// TODO: Rewrite using UserController
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;

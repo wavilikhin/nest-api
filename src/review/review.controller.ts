@@ -20,9 +20,9 @@ import { ReviewService } from './review.service';
 @Controller('review')
 export class ReviewController {
     constructor(private readonly previewService: ReviewService) {}
-    // TODO: @Post('')
+
     @UsePipes(new ValidationPipe())
-    @Post('create')
+    @Post('')
     async create(@Body() dto: CreateReviewDto) {
         return this.previewService.create(dto);
     }
