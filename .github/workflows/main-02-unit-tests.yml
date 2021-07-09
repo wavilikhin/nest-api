@@ -7,7 +7,7 @@ on:
                 required: false
                 default: false
     repository_dispatch:
-        types: [run-unit-tests]
+        types: [main-02-run-unit-tests]
 
 jobs:
     unit-tests:
@@ -34,5 +34,14 @@ jobs:
               with:
                   token: ${{ secrets.REPO_GHA_PAT }}
                   repository: wavilikhin/nest-api
-                  event-type: run-e2e-tests
+                  event-type: main-03-run-e2e-tests
                   client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
+            - name: Set final check status
+              if: ${{ (github.event_name != 'workflow_dispatch' && failure()) }}
+              uses: peter-evans/repository-dispatch@v1
+              with:
+                  token: ${{ secrets.REPO_GHA_PAT }}
+                  repository: wavilikhin/nest-api
+                  event-type: main-05-final-check
+                  client-payload: '{"success": false}'
