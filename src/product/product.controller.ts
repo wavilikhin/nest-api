@@ -22,9 +22,9 @@ import { ProductService } from './product.service';
 @Controller('product')
 export class ProductController {
     constructor(private readonly productService: ProductService) {}
-    // TODO @Post('')
+
     @UseGuards(JwtAuthGuard)
-    @Post('create')
+    @Post('')
     async create(@Body() dto: CreateProductDto) {
         return this.productService.create(dto);
     }
