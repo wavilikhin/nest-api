@@ -22,21 +22,20 @@ describe('AuthController (e2e)', () => {
             imports: [AppModule],
         }).compile();
 
-        app = moduleFixture.createNestApplication();
+        // app = moduleFixture.createNestApplication();
 
-        await app.init();
+        // await app.init();
 
-        const { body } = await request(app.getHttpServer())
-            .post('/auth/register')
-            .send(loginDto);
+        // const { body } = await request(app.getHttpServer())
+        //     .post('/auth/register')
+        //     .send(loginDto);
 
-        user = body;
+        // user = body;
     });
 
     it('/auth/login (POST) - success', async (done) => {
-        const { body } = await request(app.getHttpServer())
-            .post('/auth/login')
-            .send(loginDto);
+        const { body } = await request(app.getHttpServer()).post('/auth/login');
+        // .send(loginDto);
 
         expect(body.accessToken).toBeDefined();
         done();
