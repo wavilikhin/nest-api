@@ -3,17 +3,15 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { disconnect } from 'mongoose';
-// import { AuthDto } from 'src/auth/dto/auth.dto';
+import { CreateUserDto } from '../src/user/dto/create-user.dto';
 import { UserModel } from 'src/user/user.model';
 
-const loginDto: AuthDto = {
+const loginDto: CreateUserDto = {
     email: 'auth-test@mail.com',
     password: 'test',
 };
 
-// TODO: Rewrite using UserController
-
-describe('AuthController (e2e)', () => {
+describe('User controller (e2e)', () => {
     let app: INestApplication;
     let user: UserModel;
 
@@ -22,28 +20,29 @@ describe('AuthController (e2e)', () => {
             imports: [AppModule],
         }).compile();
 
-        // app = moduleFixture.createNestApplication();
+        app = moduleFixture.createNestApplication();
 
-        // await app.init();
+        await app.init();
 
-        // const { body } = await request(app.getHttpServer())
-        //     .post('/auth/register')
-        //     .send(loginDto);
+        const { body } = await request(app.getHttpServer())
+            .post('/user/register')
+            .send(loginDto);
 
-        // user = body;
+        user = body;
     });
 
-    it('/auth/login (POST) - success', async (done) => {
-        const { body } = await request(app.getHttpServer()).post('/auth/login');
-        // .send(loginDto);
+    it('/user/login (POST) - success', async (done) => {
+        const { body } = await request(app.getHttpServer())
+            .post('/user/login')
+            .send(loginDto);
 
         expect(body.accessToken).toBeDefined();
         done();
     });
 
-    it('/auth/login (POST) - failed by password', async (done) => {
+    it('/user/login (POST) - failed by password', async (done) => {
         await request(app.getHttpServer())
-            .post('/auth/login')
+            .post('/user/login')
             .send({
                 email: loginDto.email,
                 password: 'wrongPass',
@@ -56,9 +55,9 @@ describe('AuthController (e2e)', () => {
             .then(() => done());
     });
 
-    it('/auth/login (POST) - failed by email', async (done) => {
+    it('/user/login (POST) - failed by email', async (done) => {
         await request(app.getHttpServer())
-            .post('/auth/login')
+            .post('/user/login')
             .send({
                 email: 'wrong',
                 password: loginDto.password,
@@ -72,7 +71,7 @@ describe('AuthController (e2e)', () => {
     });
 
     afterAll(async (done) => {
-        await request(app.getHttpServer()).delete(`/auth/delete/${user._id}`);
+        await request(app.getHttpServer()).delete(`/user/delete/${user._id}`);
 
         disconnect();
 
