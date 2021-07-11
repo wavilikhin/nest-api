@@ -11,7 +11,7 @@ import {
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { ALREADY_REGISTERED_ERROR } from './constants/user.constants';
 import { CreateUserDto } from './dto/create-user.dto';

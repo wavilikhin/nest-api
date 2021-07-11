@@ -4,8 +4,8 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { CreateReviewDto } from '../src/review/dto/create-review.dto';
 import { Types, disconnect } from 'mongoose';
-import { AuthDto } from '../src/auth/dto/auth.dto';
-import { UserModel } from 'src/auth/user.model';
+import { CreateUserDto } from '../src/user/dto/create-user.dto';
+import { UserModel } from '../src/user/user.model';
 
 const productId = new Types.ObjectId().toHexString();
 
@@ -17,7 +17,7 @@ const testDto: CreateReviewDto = {
     productId,
 };
 
-const loginDto: AuthDto = {
+const loginDto: CreateUserDto = {
     email: 'review-test@mail.com',
     password: 'test',
 };
@@ -37,21 +37,21 @@ describe('ReviewController (e2e)', () => {
         await app.init();
 
         const registerRequest = await request(app.getHttpServer())
-            .post('/auth/register')
+            .post('/user/register')
             .send(loginDto);
 
         user = registerRequest.body;
 
         const { body } = await request(app.getHttpServer())
-            .post('/auth/login')
+            .post('/user/login')
             .send(loginDto);
 
         token = body.accessToken;
     });
 
-    it('/review/create (POST) - success', async (done) => {
+    it('/review/ (POST) - success', async (done) => {
         return request(app.getHttpServer())
-            .post('/review/create')
+            .post('/review/')
             .send(testDto)
             .expect(201)
             .then(({ body }: request.Response) => {
@@ -61,9 +61,9 @@ describe('ReviewController (e2e)', () => {
             });
     });
 
-    it('/review/create (POST) - fail', async (done) => {
+    it('/review/ (POST) - fail', async (done) => {
         return request(app.getHttpServer())
-            .post('/review/create')
+            .post('/review/')
             .send({ ...testDto, rating: 0 })
             .expect(400)
             .then(({ body }: request.Response) => {
