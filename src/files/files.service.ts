@@ -3,12 +3,15 @@ import { FileElementRespose } from './dto/file-element.response';
 import { format } from 'date-fns';
 import { path } from 'app-root-path';
 import { ensureDir, writeFile } from 'fs-extra';
-
+import * as sharp from 'sharp';
+import { Mfile } from './mfile.class';
 @Injectable()
 export class FilesService {
-    async saveFiles(
-        files: Express.Multer.File[],
-    ): Promise<FileElementRespose[]> {
+    //  TODO:
+    //  [] - Add (sqoosh)[https://github.com/GoogleChromeLabs/squoosh/tree/dev/libsquoosh] for img min
+    //  [] - Replace nestjs static with nginx
+
+    async saveFiles(files: Mfile[]): Promise<FileElementRespose[]> {
         const dateFolder = format(new Date(), 'yyyy-MM-dd');
 
         const uploadFolder = `${path}/uploads/${dateFolder}`;
@@ -30,5 +33,9 @@ export class FilesService {
         }
 
         return res;
+    }
+
+    async convertToWebP(file: Buffer): Promise<Buffer> {
+        return sharp(file).webp().toBuffer();
     }
 }

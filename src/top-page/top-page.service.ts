@@ -17,6 +17,10 @@ export class TopPageService {
         return this.topPageModel.create(dto);
     }
 
+    async findAll() {
+        return this.topPageModel.find({});
+    }
+
     async findById(id: string) {
         const topPage = await this.topPageModel.findById(id).exec();
 
