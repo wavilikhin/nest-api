@@ -7,7 +7,7 @@ import { TelegramService } from './telegram.service';
 @Module({})
 export class TelegramModule {
     static forRootAsync(options: ITelegramModuleAsyncOptions): DynamicModule {
-        const asyncOptions = this.createAsyncOptionsProvider(options);
+        const asyncOptions = TelegramModule.createAsyncOptionsProvider(options);
 
         return {
             module: TelegramModule,

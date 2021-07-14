@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { REVIEW_NOT_FOUND } from './review.constants';
 import { ReviewService } from './review.service';
-import { TelegramService } from 'src/telegram/telegram.service';
+import { TelegramService } from '../telegram/telegram.service';
 
 @Controller('review')
 export class ReviewController {
