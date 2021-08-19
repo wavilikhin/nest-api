@@ -10,7 +10,7 @@ services:
         ports:
             - '3000:3000'
         volumes:
-            - ./env:/opt/app/api/
+            - .env:/opt/app/api/
     mongo:
         image: mongo:4.4.4
         container_name: mongo

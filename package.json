@@ -11,7 +11,7 @@
     },
     "scripts": {
         "prebuild": "rimraf dist",
-        "clear:dev": "rimraf src",
+        "clear:dev": "rimraf src && rimraf test && rimraf env && rm tsconfig.build.json && rm tsconfig.json && rm tslint.json && rm docker-compose.yml && rm nest-cli.json && rm README.md && rm Dockerfile && rm package.json && rm package-lock.json",
         "build": "nest build",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "USE_LOCAL_MONGO_HOST=true nest start",
