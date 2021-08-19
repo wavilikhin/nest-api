@@ -9,7 +9,7 @@ on:
                 default: false
     repository_dispatch:
         types: [main-05-final-check]
-    push:
+
     pull_request:
         branches: ['master', 'development']
 

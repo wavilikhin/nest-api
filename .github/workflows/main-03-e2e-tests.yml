@@ -8,7 +8,7 @@ on:
                 default: false
     repository_dispatch:
         types: [main-03-run-e2e-tests]
-    push:
+
     pull_request:
         branches: ['master', 'development']
 

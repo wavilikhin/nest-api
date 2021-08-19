@@ -8,7 +8,7 @@ on:
                 default: false
     repository_dispatch:
         types: [main-02-run-unit-tests]
-    push:
+
     pull_request:
         branches: ['master', 'development']
 
