@@ -1,0 +1,27 @@
+name: Run tests
+
+on:
+    pull_request:
+        branches: ['master', 'development']
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - uses: actions/setup-node@v2-beta
+              with:
+                  node-version: 16.x
+
+            - name: npm install
+              run: npm ci
+
+            - name: npm formatter
+              run: npm run format
+
+            - name: Run linter
+              run: npm run lint
+
+            - name: Run builder
+              run: npm run build
