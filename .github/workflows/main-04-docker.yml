@@ -8,6 +8,9 @@ on:
                 default: false
     repository_dispatch:
         types: [main-04-publish-docker-image]
+    push:
+    pull_request:
+        branches: ['master', 'development']
 
 jobs:
     publish-docker-image:
