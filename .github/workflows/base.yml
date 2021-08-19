@@ -17,11 +17,33 @@ jobs:
             - name: npm install
               run: npm ci
 
-            - name: npm formatter
-              run: npm run format
-
             - name: Run linter
               run: npm run lint
+    format:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - uses: actions/setup-node@v2-beta
+              with:
+                  node-version: 16.x
+
+            - name: npm install
+              run: npm ci
+
+            - name: Run formatter
+              run: npm run format
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - uses: actions/setup-node@v2-beta
+              with:
+                  node-version: 16.x
+
+            - name: npm install
+              run: npm ci
 
             - name: Run builder
               run: npm run build
