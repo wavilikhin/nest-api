@@ -43,3 +43,4 @@ todo.md
 # DB
 mongo-data*
 uploads
+.env
