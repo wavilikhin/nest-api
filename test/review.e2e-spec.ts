@@ -112,6 +112,9 @@ describe('ReviewController (e2e)', () => {
     afterAll(async (done) => {
         await request(app.getHttpServer()).delete(`/auth/delete/${user._id}`);
 
+        // avoid jest open handle error
+        await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
+
         disconnect();
 
         done();
