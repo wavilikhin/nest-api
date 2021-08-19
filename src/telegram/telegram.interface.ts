@@ -8,8 +8,10 @@ export interface ITelegramOptions {
 export interface ITelegramModuleAsyncOptions
     extends Pick<ModuleMetadata, 'imports'> {
     useFactory: (
+        // tslint:disable-next-line: no-any
         ...args: any[]
     ) => Promise<ITelegramOptions> | ITelegramOptions;
 
+    // tslint:disable-next-line: no-any
     inject?: any[];
 }
