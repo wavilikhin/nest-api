@@ -19,6 +19,7 @@ jobs:
               run: npm run lint
 
     unit-tests:
+        needs: lint
         runs-on: ubuntu-latest
 
         steps:
@@ -37,6 +38,7 @@ jobs:
               run: npm run test
 
     e2e-tests:
+        needs: [lint, unit-tests]
         runs-on: ubuntu-latest
 
         steps:
@@ -60,6 +62,7 @@ jobs:
                   USE_LOCAL_MONGO_HOST: true
 
     publish-docker-image:
+        needs: [lint, unit-tests, e2e-tests]
         runs-on: ubuntu-latest
 
         steps:
