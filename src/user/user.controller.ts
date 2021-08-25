@@ -7,16 +7,19 @@ import {
     Inject,
     Param,
     Post,
+    Req,
     UseGuards,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { AuthService } from '../auth/auth.service';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { ALREADY_REGISTERED_ERROR } from './constants/user.constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { TestEnvGuard } from './guards/test-env.guard';
 import { UserService } from './user.service';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('user')
 export class UserController {
@@ -46,7 +49,14 @@ export class UserController {
             dto.password,
         );
 
-        return this.authService.login(user.email);
+        return this.authService.login(user._id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @HttpCode(200)
+    @Post('logout')
+    async logout(@Req() request: Record<string, unknown>) {
+        return this.authService.logout(request.user as string);
     }
 
     @UseGuards(TestEnvGuard)
@@ -54,5 +64,11 @@ export class UserController {
     @Delete('delete/:id')
     async delete(@Param('id', IdValidationPipe) id: string) {
         return this.userService.deleteUser(id);
+    }
+
+    @HttpCode(200)
+    @Post('refresh')
+    async refresh(@Body() dto: RefreshTokenDto) {
+        return this.authService.refresh(dto);
     }
 }

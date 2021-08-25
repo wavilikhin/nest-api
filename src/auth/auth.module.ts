@@ -5,6 +5,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getJwtConfig } from '../configs/jwt.config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { TypegooseModule } from 'nestjs-typegoose';
+import { RefreshTokenModel } from './refresh-token.model';
+
 @Module({
     imports: [
         ConfigModule,
@@ -14,6 +17,14 @@ import { JwtStrategy } from './strategies/jwt.strategy';
             useFactory: getJwtConfig,
         }),
         PassportModule,
+        TypegooseModule.forFeature([
+            {
+                typegooseClass: RefreshTokenModel,
+                schemaOptions: {
+                    collection: 'RefreshToken',
+                },
+            },
+        ]),
     ],
 
     providers: [AuthService, JwtStrategy],
