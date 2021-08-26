@@ -4,7 +4,7 @@ import { AppModule } from '../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { disconnect } from 'mongoose';
 import { CreateUserDto } from '../src/user/dto/create-user.dto';
-import { UserModel } from 'src/user/user.model';
+import { UserModel } from '../src/user/user.model';
 import { JwtService } from '@nestjs/jwt';
 
 const firstLoginDto: CreateUserDto = {
