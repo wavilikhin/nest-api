@@ -19,11 +19,12 @@
         "start:debug": "USE_LOCAL_MONGO_HOST=true nest start --debug --watch",
         "start:prod": "node dist/main",
         "lint": "tslint --fix --project .",
-        "test": "NODE_ENV=test JWT_SECRET=test jest",
+        "test": "NODE_ENV=test jest",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-        "test:e2e": "NODE_ENV=test USE_LOCAL_MONGO_HOST=true jest --config ./test/jest-e2e.json",
+        "test:e2e": "NODE_ENV=test JWT_SECRET=test jest --config ./test/jest-e2e.json",
+        "test:e2e:watch": "npm run test:e2e -- --watch",
         "prepare": "husky install"
     },
     "dependencies": {
@@ -93,6 +94,7 @@
         "transform": {
             "^.+\\.(t|j)s$": "ts-jest"
         },
+        "collectCoverage": true,
         "collectCoverageFrom": [
             "**/*.(t|j)s"
         ],

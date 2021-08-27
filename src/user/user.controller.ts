@@ -20,6 +20,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { TestEnvGuard } from './guards/test-env.guard';
 import { UserService } from './user.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { UserId } from '../decorators/user-id.decorator';
 
 @Controller('user')
 export class UserController {
@@ -55,8 +56,8 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @HttpCode(200)
     @Post('logout')
-    async logout(@Req() request: Record<string, unknown>) {
-        return this.authService.logout(request.user as string);
+    async logout(@UserId() userId: string) {
+        return this.authService.logout(userId);
     }
 
     @UseGuards(TestEnvGuard)

@@ -35,7 +35,9 @@ export class UserService {
             ),
         });
 
-        return newUser.save();
+        await newUser.save();
+
+        return { _id: newUser._id, email: newUser.email };
     }
 
     async findUser(email: string) {
