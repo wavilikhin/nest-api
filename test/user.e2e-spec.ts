@@ -31,15 +31,11 @@ describe('User controller (e2e)', () => {
     let app: INestApplication;
     let jwtService: JwtService;
     let user: UserModel;
-    let user2: UserModel;
-    let refreshToken: string;
-    let refreshToken2: string;
-    let refreshToken3: string;
-    let refreshToken4: string;
-    let accessToken3: string;
-    let accessToken4: string;
+    let accessToken: string;
+    let firstRefreshToken: string;
+    let secondRefreshToken: string;
+    let thirdRefreshToken: string;
 
-    // [] - Change to .deleteMany()
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [AppModule],
@@ -54,11 +50,11 @@ describe('User controller (e2e)', () => {
         const { body } = await request(app.getHttpServer())
             .post('/user/register')
             .send(firstLoginDto);
+        user = body;
 
-        const { body: body2 } = await request(app.getHttpServer())
+        await request(app.getHttpServer())
             .post('/user/register')
             .send(secondLoginDto);
-        user2 = body2;
 
         await request(app.getHttpServer())
             .post('/user/register')
@@ -67,8 +63,6 @@ describe('User controller (e2e)', () => {
         await request(app.getHttpServer())
             .post('/user/register')
             .send(fourthLoginDto);
-
-        user = body;
 
         const { body: loginResponse } = await request(app.getHttpServer())
             .post('/user/login')
@@ -76,7 +70,7 @@ describe('User controller (e2e)', () => {
         expect(loginResponse.refreshToken).toBeDefined();
         expect(loginResponse.accessToken).toBeDefined();
 
-        refreshToken = loginResponse.refreshToken;
+        firstRefreshToken = loginResponse.refreshToken;
 
         const { body: loginResponse2 } = await request(app.getHttpServer())
             .post('/user/login')
@@ -84,16 +78,7 @@ describe('User controller (e2e)', () => {
         expect(loginResponse2.refreshToken).toBeDefined();
         expect(loginResponse2.accessToken).toBeDefined();
 
-        refreshToken2 = loginResponse2.refreshToken;
-
-        const { body: loginResponse3 } = await request(app.getHttpServer())
-            .post('/user/login')
-            .send(thirdLoginDto);
-        expect(loginResponse3.refreshToken).toBeDefined();
-        expect(loginResponse3.accessToken).toBeDefined();
-
-        accessToken3 = loginResponse3.accessToken;
-        refreshToken3 = loginResponse3.refreshToken;
+        secondRefreshToken = loginResponse2.refreshToken;
 
         const { body: loginResponse4 } = await request(app.getHttpServer())
             .post('/user/login')
@@ -101,8 +86,67 @@ describe('User controller (e2e)', () => {
         expect(loginResponse4.refreshToken).toBeDefined();
         expect(loginResponse4.accessToken).toBeDefined();
 
-        accessToken4 = loginResponse4.accessToken;
-        refreshToken4 = loginResponse4.refreshToken;
+        accessToken = loginResponse4.accessToken;
+        thirdRefreshToken = loginResponse4.refreshToken;
+    });
+
+    it('/user/register (POST) - success', async (done) => {
+        const email = 'register@mail.com';
+        await request(app.getHttpServer())
+            .post('/user/register')
+            .send({ email, password: 'test' })
+            .expect(201)
+            .then((res) => {
+                expect(res.body._id).toBeDefined();
+                expect(res.body.email).toBeDefined();
+                expect(res.body.email).toEqual(email);
+
+                done();
+            });
+    });
+
+    it('/user/register (POST) - failed: email already exists', async (done) => {
+        const email = 'register2@mail.com';
+
+        await request(app.getHttpServer())
+            .post('/user/register')
+            .send({ email, password: 'test' })
+            .expect(201)
+            .then((res) => {
+                expect(res.body._id).toBeDefined();
+                expect(res.body.email).toBeDefined();
+                expect(res.body.email).toEqual(email);
+
+                done();
+            });
+
+        await request(app.getHttpServer())
+            .post('/user/register')
+            .send({ email, password: 'test' })
+            .expect(400)
+            .then(() => {
+                done();
+            });
+    });
+
+    it('/user/register (POST) - failed: email is missing', async (done) => {
+        await request(app.getHttpServer())
+            .post('/user/register')
+            .send({ password: 'test' })
+            .expect(400)
+            .then(() => {
+                done();
+            });
+    });
+
+    it('/user/register (POST) - failed: password is missing', async (done) => {
+        await request(app.getHttpServer())
+            .post('/user/register')
+            .send({ email: 'test@mail.ru' })
+            .expect(400)
+            .then(() => {
+                done();
+            });
     });
 
     it('/user/login (POST) - success', async (done) => {
@@ -174,13 +218,13 @@ describe('User controller (e2e)', () => {
     it('/user/logout (POST) - refresh tokens become invalid on logout', async (done) => {
         await request(app.getHttpServer())
             .post('/user/logout')
-            .set('Authorization', 'Bearer ' + accessToken4)
+            .set('Authorization', 'Bearer ' + accessToken)
             .send()
             .expect(200);
 
         await request(app.getHttpServer())
             .post('/user/refresh')
-            .send({ refreshToken: refreshToken4 })
+            .send({ refreshToken: thirdRefreshToken })
             .expect(404)
             .then((res) => {
                 expect(res.body).toStrictEqual({
@@ -196,7 +240,7 @@ describe('User controller (e2e)', () => {
     it('/user/refresh (POST) - success', async (done) => {
         const { body } = await request(app.getHttpServer())
             .post('/user/refresh')
-            .send({ refreshToken });
+            .send({ refreshToken: firstRefreshToken });
 
         expect(body.accessToken).toBeDefined();
         expect(body.refreshToken).toBeDefined();
@@ -223,14 +267,14 @@ describe('User controller (e2e)', () => {
     it('/user/refresh (POST) - refresh token can be used only once', async (done) => {
         const { body } = await request(app.getHttpServer())
             .post('/user/refresh')
-            .send({ refreshToken: refreshToken2 });
+            .send({ refreshToken: secondRefreshToken });
 
         expect(body.accessToken).toBeDefined();
         expect(body.refreshToken).toBeDefined();
 
         await request(app.getHttpServer())
             .post('/user/refresh')
-            .send({ refreshToken: refreshToken2 })
+            .send({ refreshToken: secondRefreshToken })
             .expect(404)
             .then((res) => {
                 expect(res.body).toStrictEqual({
@@ -277,9 +321,6 @@ describe('User controller (e2e)', () => {
     });
 
     afterAll(async (done) => {
-        // [] - Change to .deleteMany()
-        await request(app.getHttpServer()).delete(`/user/delete/${user._id}`);
-
         disconnect();
 
         done();
