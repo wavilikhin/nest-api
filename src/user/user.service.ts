@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Inject,
+    Injectable,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
@@ -40,11 +45,11 @@ export class UserService {
     async validateUser(
         email: string,
         password: string,
-    ): Promise<Pick<UserModel, 'email'>> {
+    ): Promise<Pick<UserModel, '_id'>> {
         const user = await this.findUser(email);
 
         if (!user) {
-            throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
+            throw new ForbiddenException(USER_NOT_FOUND_ERROR);
         }
 
         const isCorrectPassword = await this.authService.comparePasswords(
@@ -53,10 +58,10 @@ export class UserService {
         );
 
         if (!isCorrectPassword) {
-            throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
+            throw new ForbiddenException(WRONG_PASSWORD_ERROR);
         }
 
-        return { email: user.email };
+        return { _id: user._id };
     }
 
     async deleteUser(id: string) {
