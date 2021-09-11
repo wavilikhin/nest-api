@@ -73,7 +73,7 @@ export class UserController {
         description: 'Invalid data provided',
     })
     @ApiForbiddenResponse({
-        description: "User with provided email doesn't exist",
+        description: 'User with provided email doesn\'t exist',
     })
     @ApiInternalServerErrorResponse({ description: 'Unknown server error' })
     @HttpCode(200)
