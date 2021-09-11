@@ -68,7 +68,7 @@ export class UserController {
         description: 'Invalid data provided',
     })
     @ApiForbiddenResponse({
-        description: 'User with provided email doesn\'t exist',
+        description: "User with provided email doesn't exist",
     })
     @ApiInternalServerErrorResponse({ description: 'Unknown server error' })
     @HttpCode(200)
@@ -98,14 +98,6 @@ export class UserController {
     async logout(@UserId() userId: string) {
         return this.authService.logout(userId);
     }
-
-    // @ApiBearerAuth()
-    // @UseGuards(TestEnvGuard)
-    // @HttpCode(200)
-    // @Delete('delete/:id')
-    // async delete(@Param('id', IdValidationPipe) id: string) {
-    //     return this.userService.deleteUser(id);
-    // }
 
     @ApiOperation({ summary: 'Update tokens using refresh token' })
     @ApiOkResponse({

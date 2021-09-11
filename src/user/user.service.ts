@@ -65,11 +65,4 @@ export class UserService {
 
         return { _id: user._id };
     }
-
-    // async deleteUser(id: string) {
-    //     if (this.configService.get('NODE_ENV') === 'test') {
-    //         return this.userModel.findByIdAndDelete(id).exec();
-    //     }
-    //     return;
-    // }
 }
