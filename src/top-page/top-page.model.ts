@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { prop, index } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 

@@ -4,7 +4,9 @@ import { TopPageService } from '../top-page/top-page.service';
 import { format, subDays } from 'date-fns';
 import { Builder } from 'xml2js';
 import { CATEGORY_URL } from './sitemap.constants';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('sitemap')
 @Controller('sitemap')
 export class SitemapController {
     domain: string;
