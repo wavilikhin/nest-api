@@ -7,14 +7,44 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+    ApiBearerAuth,
+    ApiBody,
+    ApiConsumes,
+    ApiInternalServerErrorResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { FileElementRespose } from './dto/file-element.response';
+import { FileUploadDto } from './dto/file-upload.dto';
 import { FilesService } from './files.service';
 import { Mfile } from './mfile.class';
 
+@ApiTags('files')
 @Controller('files')
 export class FilesController {
     constructor(private readonly filesService: FilesService) {}
+    @ApiOperation({ summary: 'Upload photo' })
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        description: 'Photo',
+        type: FileUploadDto,
+    })
+    @ApiBearerAuth()
+    @ApiBearerAuth()
+    @ApiOkResponse({
+        description: 'Files uploaded',
+        type: FileElementRespose,
+    })
+    @ApiUnauthorizedResponse({
+        description: 'Invalid access token',
+    })
+    @ApiInternalServerErrorResponse({
+        description: 'Unknown server error',
+    })
     @Post('upload')
     @UseGuards(JwtAuthGuard)
     @HttpCode(200)
