@@ -15,7 +15,7 @@
         "build": "nest build",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "USE_LOCAL_MONGO_HOST=true nest start",
-        "start:dev": "USE_LOCAL_MONGO_HOST=true nest start --watch",
+        "start:dev": "nest start --watch",
         "start:debug": "USE_LOCAL_MONGO_HOST=true nest start --debug --watch",
         "start:prod": "node dist/main",
         "lint": "tslint --fix --project .",

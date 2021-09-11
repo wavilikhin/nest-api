@@ -2,22 +2,17 @@ import {
     BadRequestException,
     Body,
     Controller,
-    Delete,
     HttpCode,
     Inject,
-    Param,
     Post,
-    Req,
     UseGuards,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { AuthService } from '../auth/auth.service';
-import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { ALREADY_REGISTERED_ERROR } from './constants/user.constants';
 import { CreateUserDto } from './dto/create-user.dto';
-import { TestEnvGuard } from './guards/test-env.guard';
 import { UserService } from './user.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { UserId } from '../decorators/user-id.decorator';
@@ -73,7 +68,7 @@ export class UserController {
         description: 'Invalid data provided',
     })
     @ApiForbiddenResponse({
-        description: 'User with provided email doesn\'t exist',
+        description: "User with provided email doesn't exist",
     })
     @ApiInternalServerErrorResponse({ description: 'Unknown server error' })
     @HttpCode(200)
