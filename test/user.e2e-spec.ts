@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { disconnect } from 'mongoose';
 import { CreateUserDto } from '../src/user/dto/create-user.dto';
 import { UserModel } from '../src/user/user.model';
@@ -42,6 +42,7 @@ describe('User controller (e2e)', () => {
         }).compile();
 
         app = moduleFixture.createNestApplication();
+        app.useGlobalPipes(new ValidationPipe());
 
         jwtService = moduleFixture.get<JwtService>(JwtService);
 
@@ -96,11 +97,7 @@ describe('User controller (e2e)', () => {
             .post('/user/register')
             .send({ email, password: 'test' })
             .expect(201)
-            .then((res) => {
-                expect(res.body._id).toBeDefined();
-                expect(res.body.email).toBeDefined();
-                expect(res.body.email).toEqual(email);
-
+            .then(() => {
                 done();
             });
     });
@@ -112,11 +109,7 @@ describe('User controller (e2e)', () => {
             .post('/user/register')
             .send({ email, password: 'test' })
             .expect(201)
-            .then((res) => {
-                expect(res.body._id).toBeDefined();
-                expect(res.body.email).toBeDefined();
-                expect(res.body.email).toEqual(email);
-
+            .then(() => {
                 done();
             });
 
@@ -321,6 +314,8 @@ describe('User controller (e2e)', () => {
     });
 
     afterAll(async (done) => {
+        app.close();
+
         disconnect();
 
         done();
