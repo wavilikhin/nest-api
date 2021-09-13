@@ -45,3 +45,4 @@ todo.md
 mongo-data*
 uploads
 .env
+.env.local

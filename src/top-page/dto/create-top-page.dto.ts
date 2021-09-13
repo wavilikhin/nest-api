@@ -7,6 +7,7 @@ import {
     IsOptional,
     IsEnum,
     ValidateNested,
+    IsDate,
 } from 'class-validator';
 
 export enum TopLevelCategory {
@@ -28,6 +29,9 @@ class HhData {
 
     @IsNumber()
     seniorSalary: number;
+
+    @IsDate()
+    updatedAt: Date;
 }
 
 class TopPageAdvantage {
