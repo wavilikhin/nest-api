@@ -18,6 +18,8 @@
         "start:dev": "nest start --watch",
         "start:debug": "USE_LOCAL_MONGO_HOST=true nest start --debug --watch",
         "start:prod": "node dist/main",
+        "db:seed": "ts-node ./seed/db-seed.ts",
+        "db:drop": "ts-node ./seed/db-drop.ts",
         "lint": "tslint --fix --project .",
         "test": "NODE_ENV=test jest",
         "test:watch": "jest --watch",
@@ -82,7 +84,7 @@
         "supertest": "^6.0.0",
         "ts-jest": "^26.4.3",
         "ts-loader": "^8.0.8",
-        "ts-node": "^9.0.0",
+        "ts-node": "^9.1.1",
         "tsconfig-paths": "^3.9.0",
         "tslint": "^6.1.3",
         "typescript": "^4.0.5"

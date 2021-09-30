@@ -160,7 +160,7 @@ export class TopPageController {
     @Cron('0 0 * * *', { name: 'test' })
     @Post('test')
     async test() {
-        const job = this.schedulerRegistry.getCronJob('test');
+        // const job = this.schedulerRegistry.getCronJob('test');
 
         const data = await this.topPageService.findForHhUpdate(new Date());
 

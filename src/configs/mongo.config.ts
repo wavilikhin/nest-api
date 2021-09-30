@@ -30,7 +30,7 @@ const getMongoString = (configService: ConfigService) => {
               configService.get('MONGO_AUTHDATABASE');
 };
 
-const getMongoOptions = () => ({
+export const getMongoOptions = () => ({
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
