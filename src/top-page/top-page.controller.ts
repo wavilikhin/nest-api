@@ -5,6 +5,7 @@ import {
     Get,
     HttpCode,
     Inject,
+    Logger,
     Param,
     Patch,
     Post,
@@ -27,18 +28,20 @@ import {
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
-    ApiParam,
     ApiTags,
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { TopPageModel } from './top-page.model';
 import { FromDbTopPageDto } from './dto/from-db-top-page.dto';
+import { HhService } from '../../src/hh/hh.service';
+import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 
 @ApiTags('top-page')
 @Controller('top-page')
 export class TopPageController {
     constructor(
         @Inject(TopPageService) private readonly topPageService: TopPageService,
+        private readonly hhService: HhService,
+        private readonly schedulerRegistry: SchedulerRegistry,
     ) {}
 
     @ApiOperation({ summary: 'Create new top page' })
@@ -151,5 +154,24 @@ export class TopPageController {
     @Get('textSearch/:text')
     async textSearch(@Param('text') text: string) {
         return this.topPageService.findByText(text);
+    }
+
+    // TODO - Swagger
+    @Cron('0 0 * * *', { name: 'hh-data' })
+    @Post('test')
+    async test() {
+        // const job = this.schedulerRegistry.getCronJob('hh-data');
+
+        const data = await this.topPageService.findForHhUpdate(new Date());
+
+        for (const page of data) {
+            const hhData = await this.hhService.getData(page.category);
+
+            Logger.log(hhData);
+
+            page.hh = hhData;
+
+            await this.topPageService.updateById(page._id, page);
+        }
     }
 }

@@ -117,10 +117,7 @@ describe('User controller (e2e)', () => {
         await request(app.getHttpServer())
             .post('/user/register')
             .send({ email, password: 'test' })
-            .expect(201)
-            .then(() => {
-                done();
-            });
+            .expect(201);
 
         await request(app.getHttpServer())
             .post('/user/register')
