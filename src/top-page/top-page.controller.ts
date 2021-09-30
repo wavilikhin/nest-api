@@ -32,7 +32,7 @@ import {
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { FromDbTopPageDto } from './dto/from-db-top-page.dto';
-import { HhService } from 'src/hh/hh.service';
+import { HhService } from '../../src/hh/hh.service';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 
 @ApiTags('top-page')
@@ -157,10 +157,10 @@ export class TopPageController {
     }
 
     // TODO - Swagger
-    @Cron('0 0 * * *', { name: 'test' })
+    @Cron('0 0 * * *', { name: 'hh-data' })
     @Post('test')
     async test() {
-        // const job = this.schedulerRegistry.getCronJob('test');
+        // const job = this.schedulerRegistry.getCronJob('hh-data');
 
         const data = await this.topPageService.findForHhUpdate(new Date());
 

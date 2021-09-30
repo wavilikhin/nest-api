@@ -96,11 +96,7 @@ describe('User controller (e2e)', () => {
             .post('/user/register')
             .send({ email, password: 'test' })
             .expect(201)
-            .then((res) => {
-                expect(res.body._id).toBeDefined();
-                expect(res.body.email).toBeDefined();
-                expect(res.body.email).toEqual(email);
-
+            .then(() => {
                 done();
             });
     });
@@ -111,14 +107,7 @@ describe('User controller (e2e)', () => {
         await request(app.getHttpServer())
             .post('/user/register')
             .send({ email, password: 'test' })
-            .expect(201)
-            .then((res) => {
-                expect(res.body._id).toBeDefined();
-                expect(res.body.email).toBeDefined();
-                expect(res.body.email).toEqual(email);
-
-                done();
-            });
+            .expect(201);
 
         await request(app.getHttpServer())
             .post('/user/register')

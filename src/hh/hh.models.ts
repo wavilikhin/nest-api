@@ -1,3 +1,4 @@
+// tslint:disable: no-any
 export interface HhResponse {
     items: Vacancy[];
     found: number;
