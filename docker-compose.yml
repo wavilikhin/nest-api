@@ -1,21 +1,23 @@
 version: '3.3'
 services:
     nest_api:
+        # For local build testing
         build: ./
+        # For testing build from gh packages
         # image: docker.pkg.github.com/wavilikhin/nest-api/nest-api:develop
         container_name: nest-js-api
         restart: always
         ports:
             - '3000:3000'
         volumes:
-            - ./env:/opt/app/api/
+            - .env:/opt/app/api/
     mongo:
         image: mongo:4.4.4
         container_name: mongo
         restart: always
         environment:
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=admin
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_LOGIN}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
         ports:
             - '27017:27017'
         volumes:

@@ -10,26 +10,27 @@ export const getMongoConfig = async (
     };
 };
 
-const getMongoString = (configService: ConfigService) =>
-    configService.get('USE_LOCAL_MONGO_HOST')
+const getMongoString = (configService: ConfigService) => {
+    return configService.get('USE_LOCAL_MONGO_HOST')
         ? 'mongodb://' +
-          configService.get('MONGO_LOCAL_HOST') +
-          ':' +
-          configService.get('MONGO_PORT') +
-          '/' +
-          configService.get('MONGO_AUTHDATABASE')
+              configService.get('MONGO_LOCAL_HOST') +
+              ':' +
+              configService.get('MONGO_PORT') +
+              '/' +
+              configService.get('MONGO_AUTHDATABASE')
         : 'mongodb://' +
-          configService.get('MONGO_LOGIN') +
-          ':' +
-          configService.get('MONGO_PASSWORD') +
-          '@' +
-          configService.get('MONGO_DOCKER_HOST') +
-          ':' +
-          configService.get('MONGO_PORT') +
-          '/' +
-          configService.get('MONGO_AUTHDATABASE');
+              configService.get('MONGO_LOGIN') +
+              ':' +
+              configService.get('MONGO_PASSWORD') +
+              '@' +
+              configService.get('MONGO_DOCKER_HOST') +
+              ':' +
+              configService.get('MONGO_PORT') +
+              '/' +
+              configService.get('MONGO_AUTHDATABASE');
+};
 
-const getMongoOptions = () => ({
+export const getMongoOptions = () => ({
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,

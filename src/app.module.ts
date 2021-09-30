@@ -6,9 +6,17 @@ import { ReviewModule } from './review/review.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { getMongoConfig } from './configs/mongo.config';
+import { UserModule } from './user/user.module';
+import { FilesModule } from './files/files.module';
+import { SitemapModule } from './sitemap/sitemap.module';
+import { TelegramModule } from './telegram/telegram.module';
+import { getTelegramConfig } from './configs/telegram.config';
+import { HhModule } from './hh/hh.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
+        ScheduleModule.forRoot(),
         ConfigModule.forRoot(),
         TypegooseModule.forRootAsync({
             imports: [ConfigModule],
@@ -19,6 +27,16 @@ import { getMongoConfig } from './configs/mongo.config';
         TopPageModule,
         ProductModule,
         ReviewModule,
+        UserModule,
+        FilesModule,
+        SitemapModule,
+        TelegramModule,
+        TelegramModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: getTelegramConfig,
+        }),
+        HhModule,
     ],
 })
 export class AppModule {}
