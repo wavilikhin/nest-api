@@ -99,14 +99,6 @@ export class UserController {
         return this.authService.logout(userId);
     }
 
-    // @ApiBearerAuth()
-    // @UseGuards(TestEnvGuard)
-    // @HttpCode(200)
-    // @Delete('delete/:id')
-    // async delete(@Param('id', IdValidationPipe) id: string) {
-    //     return this.userService.deleteUser(id);
-    // }
-
     @ApiOperation({ summary: 'Update tokens using refresh token' })
     @ApiOkResponse({
         description: 'Tokens successfully updated',

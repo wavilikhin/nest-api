@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { disconnect } from 'mongoose';
 import { CreateUserDto } from '../src/user/dto/create-user.dto';
 import { UserModel } from '../src/user/user.model';
 import { JwtService } from '@nestjs/jwt';
+import { ModelType } from '@typegoose/typegoose/lib/types';
+import { RefreshTokenModel } from 'src/auth/refresh-token.model';
 
 const firstLoginDto: CreateUserDto = {
     email: 'auth-test@mail.com',
@@ -31,6 +33,8 @@ describe('User controller (e2e)', () => {
     let app: INestApplication;
     let jwtService: JwtService;
     let user: UserModel;
+    let userModel: ModelType<UserModel>;
+    let refreshTokenModel: ModelType<RefreshTokenModel>;
     let accessToken: string;
     let firstRefreshToken: string;
     let secondRefreshToken: string;
@@ -42,8 +46,14 @@ describe('User controller (e2e)', () => {
         }).compile();
 
         app = moduleFixture.createNestApplication();
+        app.useGlobalPipes(new ValidationPipe());
 
         jwtService = moduleFixture.get<JwtService>(JwtService);
+        const userService = moduleFixture.get('UserService');
+        userModel = userService.userModel;
+
+        const authService = moduleFixture.get('AuthService');
+        refreshTokenModel = authService.refreshTokenModel;
 
         await app.init();
 
@@ -310,6 +320,11 @@ describe('User controller (e2e)', () => {
     });
 
     afterAll(async (done) => {
+        await userModel.deleteMany({}).exec();
+        await refreshTokenModel.deleteMany({}).exec();
+
+        app.close();
+
         disconnect();
 
         done();
